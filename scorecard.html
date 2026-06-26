@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<title>Meme Token Scorecard — Meme Mastery Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Syne:wght@700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  @page { size: A4; margin: 0; }
+
+  body {
+    background: #080808;
+    color: #E8E8E8;
+    font-family: 'Space Grotesk', sans-serif;
+    width: 210mm;
+    min-height: 297mm;
+    margin: 0 auto;
+    padding: 0;
+  }
+
+  .page {
+    width: 210mm;
+    min-height: 297mm;
+    background: #080808;
+    padding: 14mm 14mm;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Corner accent */
+  .page::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 60px; height: 60px;
+    border-top: 3px solid #FFD700;
+    border-left: 3px solid #FFD700;
+  }
+  .page::after {
+    content: '';
+    position: absolute;
+    bottom: 0; right: 0;
+    width: 60px; height: 60px;
+    border-bottom: 3px solid #FFD700;
+    border-right: 3px solid #FFD700;
+  }
+
+  /* Header */
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 8mm;
+    padding-bottom: 6mm;
+    border-bottom: 1px solid rgba(255,215,0,0.2);
+  }
+  .brand {
+    font-family: 'Syne', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    color: #FFD700;
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+  .brand span { color: #E8E8E8; }
+  .brand-sub {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    color: #555;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  .doc-info { text-align: right; }
+  .doc-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 800;
+    color: #FFD700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .doc-version {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: #555;
+    letter-spacing: 0.1em;
+    margin-top: 3px;
+  }
+
+  /* Token info fields */
+  .token-fields {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 4mm;
+    margin-bottom: 7mm;
+    background: #101010;
+    border: 1px solid rgba(255,215,0,0.1);
+    padding: 5mm;
+  }
+  .field { }
+  .field-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.15em;
+    color: #555;
+    text-transform: uppercase;
+    margin-bottom: 3px;
+  }
+  .field-line {
+    border-bottom: 1px solid rgba(255,215,0,0.2);
+    height: 18px;
+  }
+
+  /* Section title */
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 3mm;
+    margin-top: 5mm;
+  }
+  .section-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: #FFD700;
+    letter-spacing: 0.15em;
+    background: rgba(255,215,0,0.08);
+    padding: 2px 8px;
+    border: 1px solid rgba(255,215,0,0.2);
+  }
+  .section-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    color: #E8E8E8;
+  }
+
+  /* Checklist rows */
+  .checklist { width: 100%; border-collapse: collapse; }
+  .checklist tr { border-bottom: 1px solid rgba(255,255,255,0.04); }
+  .checklist tr:last-child { border-bottom: none; }
+  .checklist td {
+    padding: 3.5px 0;
+    font-size: 11px;
+    vertical-align: middle;
+  }
+  .check-num {
+    font-family: 'JetBrains Mono', monospace;
+    color: #FFD700;
+    font-size: 9px;
+    width: 22px;
+    padding-right: 6px;
+  }
+  .check-text {
+    color: #B0B0B0;
+    flex: 1;
+    line-height: 1.4;
+  }
+  .check-weight {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: #555;
+    width: 20px;
+    text-align: center;
+  }
+  .check-box {
+    width: 18px;
+    text-align: center;
+  }
+  .box {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border: 1px solid rgba(255,215,0,0.3);
+    vertical-align: middle;
+  }
+  .check-score {
+    width: 24px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: #555;
+    text-align: center;
+    border-bottom: 1px solid rgba(255,215,0,0.2);
+  }
+
+  /* Column headers */
+  .col-headers {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0;
+    margin-bottom: 1mm;
+  }
+  .col-h {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    color: #444;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    width: 24px;
+    text-align: center;
+  }
+
+  /* Score summary */
+  .score-box {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 4mm;
+    margin-top: 7mm;
+    background: #101010;
+    border: 1px solid rgba(255,215,0,0.15);
+    padding: 5mm;
+  }
+  .score-item { text-align: center; }
+  .score-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    color: #555;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .score-value {
+    font-family: 'Syne', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    color: #FFD700;
+    line-height: 1;
+  }
+  .score-value.big { font-size: 36px; }
+  .score-line {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    color: #555;
+    border-top: 1px solid rgba(255,215,0,0.15);
+    padding-top: 3px;
+    margin-top: 3px;
+  }
+
+  /* Decision row */
+  .decision-row {
+    margin-top: 5mm;
+    border: 1px solid rgba(255,215,0,0.2);
+    padding: 4mm 5mm;
+    display: flex;
+    gap: 8mm;
+    align-items: center;
+  }
+  .decision-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: #FFD700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .decision-options {
+    display: flex;
+    gap: 10mm;
+    flex: 1;
+  }
+  .decision-opt {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    color: #B0B0B0;
+  }
+  .decision-opt .box { border-color: rgba(255,215,0,0.4); }
+
+  /* Verdict guide */
+  .verdict-guide {
+    margin-top: 3mm;
+    display: flex;
+    gap: 3mm;
+  }
+  .vg-item {
+    flex: 1;
+    padding: 3mm;
+    text-align: center;
+    border: 1px solid;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.05em;
+  }
+  .vg-item.red { border-color: rgba(255,61,87,0.3); color: #FF3D57; }
+  .vg-item.yellow { border-color: rgba(255,215,0,0.3); color: #FFD700; }
+  .vg-item.green { border-color: rgba(0,230,118,0.3); color: #00E676; }
+
+  .vg-range { font-size: 14px; font-weight: 800; display: block; margin-bottom: 2px; }
+
+  /* Footer */
+  .footer-bar {
+    position: absolute;
+    bottom: 10mm;
+    left: 14mm;
+    right: 14mm;
+    border-top: 1px solid rgba(255,215,0,0.1);
+    padding-top: 4mm;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .footer-left {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    color: #333;
+    letter-spacing: 0.1em;
+  }
+  .footer-right {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    color: #FFD700;
+    letter-spacing: 0.08em;
+  }
+
+  @media print {
+    body { background: #080808 !important; }
+    .page { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div>
+      <div class="brand">MEME<span>MASTERY</span></div>
+      <div class="brand-sub">Academy · Student Resource</div>
+    </div>
+    <div class="doc-info">
+      <div class="doc-title">Token Scorecard</div>
+      <div class="doc-version">V1.0 · 20-POINT CHECKLIST</div>
+    </div>
+  </div>
+
+  <!-- TOKEN INFO FIELDS -->
+  <div class="token-fields">
+    <div class="field">
+      <div class="field-label">Token Name / Symbol</div>
+      <div class="field-line"></div>
+    </div>
+    <div class="field">
+      <div class="field-label">Contract Address</div>
+      <div class="field-line"></div>
+    </div>
+    <div class="field">
+      <div class="field-label">Date &amp; Time Checked</div>
+      <div class="field-line"></div>
+    </div>
+    <div class="field">
+      <div class="field-label">Chain</div>
+      <div class="field-line"></div>
+    </div>
+    <div class="field">
+      <div class="field-label">Market Cap at Check</div>
+      <div class="field-line"></div>
+    </div>
+    <div class="field">
+      <div class="field-label">Token Age</div>
+      <div class="field-line"></div>
+    </div>
+  </div>
+
+  <!-- SECTION A: SAFETY CHECKS -->
+  <div class="section-header">
+    <span class="section-num">SECTION A</span>
+    <span class="section-name">Safety & Contract Checks</span>
+  </div>
+
+  <table class="checklist">
+    <tr>
+      <td class="check-num">01</td>
+      <td class="check-text">Liquidity is locked (verify on DexScreener or Mudra)</td>
+      <td class="check-weight">+2</td>
+      <td class="check-box"><span class="box"></span></td>
+      <td class="check-score">___</td>
+    </tr>
+    <tr>
+      <td class="check-num">02</td>
+      <td class="check-text">No mint authority — contract cannot print new tokens</td>
+      <td class="check-weight">+2</td>
+      <td class="check-box"><span class="box"></span></td>
+      <td class="check-score">___</td>
+    </tr>
+    <tr>
+      <td class="check-num">03</td>
+      <td class="check-text">No freeze authority — dev cannot freeze your tokens</td>
+      <td class="check-weight">+2</td>
+      <td class="check-box"><span class="box"></span></td>
+      <td class="check-score">___</td>
+    </tr>
+    <tr>
+      <td class="check-num">04</td>
+      <td class="check-text">Dev wallet holds less than 5% of total supply</td>
+      <td class="check-weight">+2</td>
+      <td class="check-box"><span class="box"></span></td>
+      <td class="check-score">___</td>
+    </tr>
+    <tr>
+      <td class="check-num">05</td>
+      <td class="check-text">Top 10 wallets hold less than 40% of supply combined</td>
+      <td class="check-weight">+1</td>
+      <td class="check-box"><span class="box"></span></td>
+      <td class="check-score">___</td>
+    </tr>
+  </table>
+
+  <!-- SECTION B: LIQUIDITY & VOLUME -->
+  <div class="section-header">
+    <span class="section-num">SECTION B</span>
+    <span class="section-name">Liquidity &amp; Volume</span>
+  </div>
+
+  <table class="checklist">
+    <tr>
+      <td class="check-num">06</td>
+      <td class="check-text">Liquidity pool is above $10,000 USDT</td>
+      <td class="check-weight">+1</td>
+      <td class="check-box"><span class="box"></span></td>
+      <td class="check-score">___</td>
+    </tr>
+    <tr>
+      <td class="check-num">07</td>
+      <td class="check-text">24h volume is at least 3× the liquidity pool size</td>
+      <td class="check-weight">+1</td>
+      <td class="check-box"><span class="box"></span></td>
+      <td class="check-score">___</td>
+    </tr>
+    <tr>
+      <td class="check-num">08</td>
+      <td class="check-text">Buys significantly outnumber sells in last 30 minutes</td>
+      <td class="check-weight">+1</td>
+      <td class="check-box"><span class="box"></span></td>
+      <td class="check-score">___</td>
+    </tr>
+    <tr>
+      <td class="check-num">09</td>
+      <td class="check-text">No single wallet responsible for &gt;20% of volume</td>
+      <td class="check-weight">+1</td>
+      <td class="check-box"><span class="box"></span></td>
+      <td class="check-score">___</td>
+    </tr>
+  </table>
+
+  <!-- SECTION C: CHART & MOMENTUM -->
+  <div class="section-header">
+    <span class="section-num">SECTION C</span>
+    <span class="section-name">Chart Pattern &amp; Momentum</span>
+  </div>
+
+  <table class="checklist">
+    <tr>
+      <td class="check-num">10</td>
+      <td class="check-text">Price is making higher lows (uptrend structure on 5m chart)</td>
+      <td class="check-weight">+1</td>
+      <td class="check-box"><span class="box"></span></td>
+      <td class="check-score">___</td>
+    </tr>
+    <tr>
+      <td class="check-num">11</td>
+      <td class="check-text">No massive red candle in last 10 candles (no silent dump)</td>
+      <td class="check-weight">+1</td>
+      <td class="check-box"><span class="box"></span></td>
+      <td class="check-score">___</td>
+    </tr>
+    <tr>
+      <td class="check-num">12</td>
+      <td class="check-text">Holder count above 200 and growing (check GMGN)</td>
+      <td class="check-weight">+1</td>
+      <td class="check-box"><span class="box"></span></td>
+      <td class="check-score">___</td>
+    </tr>
+  </table>
+
+  <!-- SECTION D: SOCIAL & NARRATIVE -->
+  <div class="section-header">
+    <span class="section-num">SECTION D</span>
+    <span class="section-name">Social Presence &amp; Narrative</span>
+  </div>
+
+  <table class="checklist">
+    <tr>
+      <td class="check-num">13</td>
+      <td class="check-text">Token has an active Telegram group (50+ members, recent messages)</td>
+      <td class="check-weight">+1</td>
+      <td class="check-box"><span class="box"></span></td>
+      <td class="check-score">___</td>
+    </tr>
+    <tr>
+      <td class="check-num">14</td>
+      <td class="check-text">Twitter/X account exists and has been active in last 24h</td>
+      <td class="check-weight">+1</td>
+      <td class="check-box"><span class="box"></span></td>
+      <td class="check-score">___</td>
+    </tr>
+    <tr>
+      <td class="check-num">15</td>
+      <td class="check-text">Token narrative is clear and timely (trending topic, meme, event)</td>
+      <td class="check-weight">+1</td>
+      <td class="check-box"><span class="box"></span></td>
+      <td class="check-score">___</td>
+    </tr>
+    <tr>
+      <td class="check-num">16</td>
+      <td class="check-text">No negative reports or rug warnings on Crypto Twitter</td>
+      <td class="check-weight">+1</td>
+      <td class="check-box"><span class="box"></span></td>
+      <td class="check-score">___</td>
+    </tr>
+  </table>
+
+  <!-- SECTION E: RUG FLAGS -->
+  <div class="section-header">
+    <span class="section-num">SECTION E</span>
+    <span class="section-name">Rug Pull Red Flags (DEDUCT if present)</span>
+  </div>
+
+  <table class="checklist">
+    <tr>
+      <td class="check-num">17</td>
+      <td class="check-text">Bundled launch — multiple wallets bought in block 1 (deduct if YES)</td>
+      <td class="check-weight" style="color:#FF3D57">−2</td>
+      <td class="check-box"><span class="box"></span></td>
+      <td class="check-score">___</td>
+    </tr>
+    <tr>
+      <td class="check-num">18</td>
+      <td class="check-text">Copied or recycled contract from known rug (deduct if YES)</td>
+      <td class="check-weight" style="color:#FF3D57">−2</td>
+      <td class="check-box"><span class="box"></span></td>
+      <td class="check-score">___</td>
+    </tr>
+    <tr>
+      <td class="check-num">19</td>
+      <td class="check-text">Admins in Telegram group promoting aggressively / no KYC (deduct if YES)</td>
+      <td class="check-weight" style="color:#FF3D57">−1</td>
+      <td class="check-box"><span class="box"></span></td>
+      <td class="check-score">___</td>
+    </tr>
+    <tr>
+      <td class="check-num">20</td>
+      <td class="check-text">LP not burned — liquidity could be removed at any time (deduct if YES)</td>
+      <td class="check-weight" style="color:#FF3D57">−2</td>
+      <td class="check-box"><span class="box"></span></td>
+      <td class="check-score">___</td>
+    </tr>
+  </table>
+
+  <!-- SCORE SUMMARY -->
+  <div class="score-box">
+    <div class="score-item">
+      <div class="score-label">Total Score</div>
+      <div class="score-value big">___  <span style="font-size:18px;color:#555">/ 20</span></div>
+      <div class="score-line">Add all points, subtract deductions</div>
+    </div>
+    <div class="score-item">
+      <div class="score-label">Position Size</div>
+      <div class="score-value">___</div>
+      <div class="score-line">Max 5% of wallet</div>
+    </div>
+    <div class="score-item">
+      <div class="score-label">Entry Price</div>
+      <div class="score-value">___</div>
+      <div class="score-line">Recorded at time of check</div>
+    </div>
+  </div>
+
+  <!-- DECISION -->
+  <div class="decision-row">
+    <div class="decision-label">My Decision:</div>
+    <div class="decision-options">
+      <div class="decision-opt"><span class="box" style="border-color:rgba(0,230,118,0.5)"></span> APE IN</div>
+      <div class="decision-opt"><span class="box" style="border-color:rgba(255,215,0,0.5)"></span> WATCH & WAIT</div>
+      <div class="decision-opt"><span class="box" style="border-color:rgba(255,61,87,0.5)"></span> HARD PASS</div>
+    </div>
+  </div>
+
+  <!-- VERDICT GUIDE -->
+  <div class="verdict-guide">
+    <div class="vg-item red"><span class="vg-range">0–9</span>HARD PASS · High rug risk</div>
+    <div class="vg-item yellow"><span class="vg-range">10–13</span>WATCH · Monitor only</div>
+    <div class="vg-item green"><span class="vg-range">14–17</span>APE IN · Small position</div>
+    <div class="vg-item green" style="border-color:rgba(0,230,118,0.6)"><span class="vg-range">18–20</span>STRONG BUY · Up to 5%</div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer-bar">
+    <div class="footer-left">MEME MASTERY ACADEMY · STUDENT RESOURCE · NOT FINANCIAL ADVICE</div>
+    <div class="footer-right">SCORECARD V1.0</div>
+  </div>
+
+</div>
+</body>
+</html>
